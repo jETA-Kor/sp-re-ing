@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.jetalab.spreinglab05.dao.BoardDAO">
+
+    <insert id="newBoard" parameterType="net.jetalab.spreinglab05.dto.BoardDTO" useGeneratedKeys="true" keyProperty="seq">
+        INSERT INTO lab05(`title`, `contents`, `author`, `password`)
+        VALUES (#{title}, #{contents}, #{author}, #{password})
+    </insert>
+
+    <select id="getBoard" parameterType="Integer" resultType="net.jetalab.spreinglab05.dto.BoardDTO">
+        SELECT `seq`, `title`, `contents`, `author`, `reads`
+          FROM lab05
+         WHERE `seq` = #{param}
+    </select>
+
+</mapper>
