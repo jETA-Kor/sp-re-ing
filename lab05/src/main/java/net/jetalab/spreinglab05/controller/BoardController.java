@@ -5,6 +5,8 @@ import net.jetalab.spreinglab05.dto.BoardDTO;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,15 +21,22 @@ public class BoardController {
     private BoardDAO boardDAO;
 
     @RequestMapping(value = "/board", method = RequestMethod.POST)
-    public BoardDTO users(BoardDTO board) throws Exception {
+    public ResponseEntity<BoardDTO> users(BoardDTO board) throws Exception {
+        if ((board.getAuthor() == null) || (board.getContents() == null) || (board.getPassword() == null) || (board.getTitle() == null)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         boardDAO.newBoard(board);
-        return board;
+        return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/board/{param}", method = RequestMethod.GET)
-    public BoardDTO users(@PathVariable("param") final int param) throws Exception {
+    public ResponseEntity<BoardDTO> users(@PathVariable("param") final int param) throws Exception {
+        /* TODO: 조회수 증가 */
         BoardDTO board = boardDAO.getBoard(param);
-        return board;
+
+        if (board == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
 }
