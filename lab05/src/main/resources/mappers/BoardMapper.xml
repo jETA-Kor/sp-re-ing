@@ -12,6 +12,7 @@
         SELECT `seq`, `title`, `contents`, `author`, `reads`
           FROM lab05
          WHERE `seq` = #{param}
+           AND `deleted` = 'N'
     </select>
 
 </mapper>
