@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.jetalab.spreinglab07.dao.UserDAO">
+
+    <sql id="findUserConditions">
+        <if test='seq != null and 0 lt seq'>
+            AND `seq` = #{seq}
+        </if>
+        <if test='country != null and country != ""'>
+            AND `country` LIKE CONCAT('%', #{country}, '%')
+        </if>
+        <if test='name != null and name != ""'>
+            AND `name` LIKE CONCAT('%', #{name}, '%')
+        </if>
+    </sql>
+
+    <select id="selectUsers" parameterType="net.jetalab.spreinglab07.dto.UserDTO"
+            resultType="net.jetalab.spreinglab07.dto.UserDTO">
+        SELECT `seq`, `name`, `country`
+        FROM lab03
+        WHERE 1 = 1
+        <include refid="findUserConditions"></include>
+    </select>
+
+    <select id="selectUserSeq" parameterType="net.jetalab.spreinglab07.dto.UserDTO"
+            resultType="Integer">
+        SELECT `seq`
+        FROM lab03
+        WHERE 1 = 1
+        <include refid="findUserConditions"></include>
+    </select>
+
+</mapper>
