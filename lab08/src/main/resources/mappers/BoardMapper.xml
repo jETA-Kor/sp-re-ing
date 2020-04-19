@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.jetalab.spreinglab08.dao.BoardDAO">
+
+    <insert id="newBoard" parameterType="net.jetalab.spreinglab08.dto.BoardDTO" useGeneratedKeys="true" keyProperty="seq">
+        INSERT INTO lab08(`title`, `contents`, `author`, `password`)
+        VALUES (#{title}, #{contents}, #{author}, #{password})
+    </insert>
+
+    <select id="getBoard" parameterType="net.jetalab.spreinglab08.dto.BoardDTO" resultType="net.jetalab.spreinglab08.dto.BoardDTO">
+        SELECT `seq`, `title`, `contents`, `author`, `reads`
+          FROM lab08
+         WHERE `seq` = #{seq}
+           <if test="password != null">
+           AND `password` = #{password}
+           </if>
+           AND `deleted` = 'N'
+    </select>
+
+    <update id="editBoard" parameterType="net.jetalab.spreinglab08.dto.BoardDTO">
+        UPDATE lab08
+           SET `password` = `password`
+           <if test="title != null">
+             , `title` = #{title}
+           </if>
+           <if test="contents != null">
+             , `contents` = #{contents}
+           </if>
+           <if test="author != null">
+             , `author` = #{author}
+           </if>
+           <if test="deleted != null">
+             , `deleted` = #{deleted}
+           </if>
+         WHERE `seq` = #{seq}
+    </update>
+
+</mapper>
