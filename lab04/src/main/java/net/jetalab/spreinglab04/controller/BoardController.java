@@ -18,7 +18,7 @@ public class BoardController {
         private BoardDAO boardDAO;
 
         @RequestMapping(value = "/board", method = RequestMethod.POST)
-        public BoardDTO users(BoardDTO board) throws Exception {
+        public BoardDTO postBoard(BoardDTO board) throws Exception {
             boardDAO.newBoard(board);
             return board;
         }

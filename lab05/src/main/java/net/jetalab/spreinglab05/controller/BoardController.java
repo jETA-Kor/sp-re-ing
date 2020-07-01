@@ -21,7 +21,7 @@ public class BoardController {
     private BoardDAO boardDAO;
 
     @RequestMapping(value = "/board", method = RequestMethod.POST)
-    public ResponseEntity<BoardDTO> users(BoardDTO board) throws Exception {
+    public ResponseEntity<BoardDTO> postBoard(BoardDTO board) throws Exception {
         if ((board.getAuthor() == null) || (board.getContents() == null) || (board.getPassword() == null) || (board.getTitle() == null)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -31,7 +31,7 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board/{param}", method = RequestMethod.GET)
-    public ResponseEntity<BoardDTO> users(@PathVariable("param") final int param) throws Exception {
+    public ResponseEntity<BoardDTO> getBoard(@PathVariable("param") final int param) throws Exception {
         /* TODO: 조회수 증가 */
         BoardDTO board = boardDAO.getBoard(param);
 
