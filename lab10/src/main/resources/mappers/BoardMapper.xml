@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.jetalab.spreinglab10.dao.BoardDAO">
+
+    <insert id="newBoard" parameterType="net.jetalab.spreinglab10.dto.BoardDTO" useGeneratedKeys="true" keyProperty="seq">
+        INSERT INTO lab10(`title`, `contents`, `author`, `password`)
+        VALUES (#{title}, #{contents}, #{author}, #{password})
+    </insert>
+
+    <select id="getBoard" parameterType="net.jetalab.spreinglab10.dto.BoardDTO" resultType="net.jetalab.spreinglab10.dto.BoardDTO">
+        SELECT `seq`, `title`, `contents`, `author`, `reads`
+          FROM lab10
+         WHERE `seq` = #{seq}
+           <if test="password != null">
+           AND `password` = #{password}
+           </if>
+           AND `deleted` = 'N'
+    </select>
+
+    <update id="editBoard" parameterType="net.jetalab.spreinglab10.dto.BoardDTO">
+        UPDATE lab10
+           SET `password` = `password`
+           <if test="title != null">
+             , `title` = #{title}
+           </if>
+           <if test="contents != null">
+             , `contents` = #{contents}
+           </if>
+           <if test="author != null">
+             , `author` = #{author}
+           </if>
+           <if test="deleted != null">
+             , `deleted` = #{deleted}
+           </if>
+         WHERE `seq` = #{seq}
+    </update>
+
+    <update id="addBoardReadCount" parameterType="net.jetalab.spreinglab10.dto.BoardDTO">
+        UPDATE lab09
+        SET `reads` = `reads` + 1
+        WHERE `seq` = #{seq}
+          AND `deleted` = 'N'
+    </update>
+
+    <select id="getBoardListNext" resultType="net.jetalab.spreinglab10.dto.BoardDTO">
+        SELECT `seq`, `title`, `contents`, `author`, `reads`
+        FROM lab10
+        WHERE 1 = 1
+        AND `deleted` = 'N'
+        <if test="lastSeq &gt; 0">
+            AND `seq` &lt; #{lastSeq}
+        </if>
+        ORDER BY `seq` DESC
+        LIMIT 0, #{size}
+    </select>
+
+    <select id="getBoardListPage" resultType="net.jetalab.spreinglab10.dto.BoardDTO">
+        SELECT `seq`, `title`, `contents`, `author`, `reads`
+        FROM lab10
+        WHERE 1 = 1
+        AND `deleted` = 'N'
+        ORDER BY `seq` DESC
+        LIMIT #{skip}, #{size}
+    </select>
+
+</mapper>
